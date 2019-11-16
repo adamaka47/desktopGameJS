@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>Game</title>
+	<style>
+		* {
+			box-sizing: border-box
+		}
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: monospace;
+		}	
+
+		#canvas {
+			display: none;
+			margin: 80px auto;
+			outline: 1px solid #444;
+		}
+
+		#start {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			-o-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			background-color: #222;
+			color: #fff;
+			font-family: monospace;
+			border: none;
+			padding: 15px 35px;
+			font-size: 24px;
+			cursor: pointer;
+			border-radius: 90% 50% 60% 50% / 24% 76% 60% 40%;
+			outline: none;
+		}
+		#start:hover {
+			background-color: #fea100;
+			color: #222;
+		}
+		
+	</style>
+</head>
+<body>
+	
+
+	<button id="start">Начать игру!</button>
+	<canvas id="canvas" width="400" height="400"></canvas>
+
+
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
+	<script>
+		let canvas = document.getElementById('canvas');
+		start.addEventListener('click', function() {
+			this.style.display = 'none'
+			canvas.style.display = 'block'
+			setInterval(draw, 1000/30);
+		})
+		let ctx = canvas.getContext("2d");
+		let posX = 20;
+		let speedX = 4;
+		let posY = 20;
+		let speedY = 4;
+		let ballRad = 20;
+		let pHeight = 10;
+		let pWidth = 75;
+		let pX = (canvas.width - pWidth) / 2;
+
+		let pressedRight, pressedLeft;
+		pressedRight = pressedLeft = false;
+
+		document.addEventListener('keydown', e => {
+			if (e.keyCode === 39) {
+				pressedRight = true;
+			}
+			if (e.keyCode === 37) {
+				pressedLeft = true;
+			}
+		}, false)
+
+		document.addEventListener('keyup', e => {
+			if (e.keyCode === 39) {
+				pressedRight = false;
+			}
+			if (e.keyCode === 37) {
+				pressedLeft = false;
+			}
+		}, false)
+
+		if (pressedRight) pX += 7
+			else pX -= 7;
+
+
+		function drawP() {
+			ctx.beginPath();
+			ctx.rect(pX, canvas.height - pHeight. pWidth, pHeight);
+			ctx.fillStyle = "#af8";
+			ctx.fill();
+			ctx.closePath();
+		}
+
+		function drawBall() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height)
+			ctx.beginPath();
+			ctx.arc(posX, posY, 20, 0, Math.PI*2, false)
+			ctx.fillStyle = 'indigo';
+			ctx.fill();
+			ctx.closePath();
+		}
+
+		function drawP() {
+			ctx.beginPath();
+			ctx.rect(pX, canvas.height - pHeight, pWidth, pHeight)
+			ctx.fillStyle = 'green';
+			ctx.fill();
+			ctx.closePath();
+		}
+
+		function checkPerm() {
+			if (pHeight + 377 < posY) {
+				if (posX < pX || posX > pX + pWidth) {
+					location.reload()
+				}			
+			}
+
+		}
+
+		function draw() {
+			posX += speedX
+			posY += speedY
+			if (posY + speedY > canvas.height - 12) {
+				speedY = -7;
+			} else if (posX + speedX > canvas.width - 12) {
+				speedX = -5;
+			} else if (posX + speedX < 12) {
+				speedX = 5;
+			} else if (posY + speedY < 12) {
+				speedY = 7;
+			}
+			if (pressedRight && pX < canvas.width - pWidth) {
+				pX += 7;
+			} else if (pressedLeft && pX > 0) {
+				pX -= 7;
+			}
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			drawBall()
+			drawP()
+			checkPerm()
+		}
+
+	</script>
+</body>
+</html>
